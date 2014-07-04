@@ -1,3 +1,5 @@
+import argparse
+
 import numpy as np
 from reportlab.lib.units import mm, inch
 from reportlab.pdfgen.canvas import Canvas
@@ -225,8 +227,19 @@ def intersection_area(box0, box1):
 
 
 def main():
-    h5 = tables.openFile("head_ct.h5")
-    volume = h5.getNode("/scan0")[:]
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('input_file',
+                        help='The path to the HDF5 file containing the volume'
+                             ' data.')
+    parser.add_argument('-n', '--node-path', default='/ct',
+                        help='The path to the node in the HDF5 file '
+                             'containing the volume.')
+
+    args = parser.parse_args()
+
+    h5 = tables.openFile(args.input_file)
+    volume = h5.getNode(args.node_path)[:]
     h5.close()
 
     vol_max = volume.max()
