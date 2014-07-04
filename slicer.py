@@ -3,11 +3,7 @@ from reportlab.lib.units import mm, inch
 from reportlab.pdfgen.canvas import Canvas
 from skimage import measure
 import tables
-
 from kiva.pdf import GraphicsContext as PdfGraphicsContext
-from traits.api import (HasStrictTraits, Array, Bool, List, Instance, Int,
-                        Property)
-
 
 PARAMS = {
     'bone': {
@@ -47,29 +43,22 @@ POST0_CENTER = (225, 345)
 POST1_CENTER = (250, 345)
 
 
-class Contour(HasStrictTraits):
-    #: The actual contours
-    contours = List(Array)
-
-    #: A bounding rectangle for the slice
-    bounding_box = Array
-
-    #: Which slice is this
-    index = Int
+class Contour(object):
+    def __init__(self, contours=None, bounding_box=None, index=0):
+        self.contours = contours
+        self.bounding_box = bounding_box
+        self.index = index
 
 
-class ContourBag(HasStrictTraits):
-    #: Contour objects
-    contours = List(Instance(Contour))
+class ContourBag(object):
+    def __init__(self, contours=None):
+        self.contours = contours
 
-    #: Are there still contours to consume?
-    has_contours = Property(Bool)
-
-    def _contours_changed(self):
         sort_key = lambda x: x.bounding_box[2] * x.bounding_box[3]
         self.contours.sort(key=sort_key, reverse=True)
 
-    def _get_has_contours(self):
+    @property
+    def has_contours(self):
         return bool(self.contours)
 
     def get_contour_less_than_width(self, width):
