@@ -1,0 +1,32 @@
+{
+    "output_width": 24.0,
+    "output_height": 18.0,
+    "output_dpi": 72.0,
+    "default_color": "red",
+    "hairline_width": 0.001,
+    "scale_factor": 0.7874,
+    "voxel_dims": [0.48828125, 0.48828125, 3.0],
+    "contours": [
+        {
+            "isovalue": 0.17,
+            "last_slice": 59,
+            "color": "green"
+        },
+        {
+            "isovalue": 0.425,
+            "last_slice": 57,
+            "color": "black"
+        }
+    ],
+    "contour_bbox_index": 0,
+    "contour_bbox_padding": 0.125,
+    "clip_boxes": [
+        [0, 190, 120, 322],
+        [392, 190, 120, 322]
+    ],
+    "clip_overlap_percentage": 95.0,
+    "registration_marks": [
+        [225, 345],
+        [250, 345]
+    ]
+}
