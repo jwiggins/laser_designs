@@ -70,10 +70,10 @@ def contour_centroid(contour):
     return xs.mean(), ys.mean()
 
 
-def create_graphics_context(index, params):
+def create_graphics_context(params):
     pagesize = (params['output_width'] * params['output_dpi'],
                 params['output_height'] * params['output_dpi'])
-    canvas = Canvas(filename="laser{}.pdf".format(index), pagesize=pagesize)
+    canvas = Canvas(filename="laser.pdf", pagesize=pagesize)
 
     gc = PdfGraphicsContext(canvas)
     gc.set_line_width(params['hairline_width'] * inch)
@@ -86,8 +86,7 @@ def create_graphics_context(index, params):
 
 
 def draw_contours(contour_collection, params):
-    context_count = 0
-    gc = create_graphics_context(context_count, params)
+    gc = create_graphics_context(params)
 
     output_w = params['output_width'] * params['output_dpi']
     output_h = params['output_height'] * params['output_dpi']
@@ -100,18 +99,15 @@ def draw_contours(contour_collection, params):
         remaining_width = output_w - origin_x
         contour_set = next_contour_set(remaining_width)
 
-        # Start a new row/PDF as needed
+        # Start a new row/page as needed
         if contour_set is None:
             origin_y += line_height
             origin_x = line_height = 0.0
 
             if (origin_y + 2.75 * params['output_dpi']) > output_h:
-                # Start a new file
+                # Start a new page
                 origin_y = 0.0
-                context_count += 1
-                gc.save()
-                gc = create_graphics_context(context_count, params)
-                #gc.begin_page()
+                gc.begin_page()
             continue
 
         contours = contour_set.contours
