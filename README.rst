@@ -32,7 +32,8 @@ following names/values:
 * ``voxel_dims`` (**optional**): The dimensions of a voxel in millimeters.
   NOTE: This is a combination of DICOM ``PixelSpacing`` and ``SliceThickness``
   attributes
-* ``contours`` (**required**): A list of objects with the following names/values:
+* ``contours`` (**required**): A list of objects with the following
+  names/values:
 
   * ``isovalue`` (**required**): The isovalue of the contour
   * ``last_slice`` (**required**): The last slice to extract this contour from
@@ -43,15 +44,24 @@ following names/values:
 * ``contour_bbox_padding`` (**optional**): An amount of padding, in inches, to
   add as a border around each slice in the output.
 * ``clip_boxes`` (**optional**): A list of rectangles, (X, Y, Width, Height)
-  lists, where contours should be clipped from the final output. 
-* ``clip_overlap_percentage`` (**optional**):
+  lists, where contours should be clipped from the final output. The
+  coordinates are in pixels, relative to the original image data.
+* ``clip_overlap_percentage`` (**optional**): An overlap percentage used to
+  determine whether a contour should be clipped by a clip_box.
 * ``registration_marks`` (**optional**): A list of objects with the following
   names/values:
 
   * ``points`` (**required**): A list of (X, Y) points in the mark
   * ``color`` (**required**): The color of the mark.
 
-See the ``sample_params.json`` file for an example of a working parameters file.
+See the ``sample_params.json`` file for an example of a working parameters
+file.
+
+Finally, feed the HDF5 and parameters file to the program:
+`python slicer.py -n <Array Node Path> -p <Params File> <HDF5 file>`
+
+You'll probably need run the script many times to figure out good parameters
+for your data.
 
 Dependencies
 ------------
