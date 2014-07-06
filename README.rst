@@ -57,8 +57,10 @@ following names/values:
 See the ``sample_params.json`` file for an example of a working parameters
 file.
 
-Finally, feed the HDF5 and parameters file to the program:
-`python slicer.py -n <Array Node Path> -p <Params File> <HDF5 file>`
+Finally, feed the HDF5 and parameters file to the program::
+
+  python slicer.py -n <Array Node Path> -p <Params File> <HDF5 file>
+
 
 You'll probably need run the script many times to figure out good parameters
 for your data.
