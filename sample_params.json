@@ -24,7 +24,7 @@
         [0, 190, 120, 322],
         [392, 190, 120, 322]
     ],
-    "clip_overlap_percentage": 95.0,
+    "clip_overlap_percentage": 0.95,
     "registration_marks": [
         [225, 345],
         [250, 345]

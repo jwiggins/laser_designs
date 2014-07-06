@@ -50,24 +50,12 @@ def box_area(box):
     return box[2] * box[3]
 
 
-def box_to_line_points(box):
-    x, y, w, h = box
-    xs = (x, x + w, x + w, x, x)
-    ys = (y, y, y + h, y + h, y)
-    return xs, ys
-
-
 def contour_bounding_box(contour, offset=0.0):
     ys, xs = contour.T
     x0, x1 = xs.min(), xs.max()
     y0, y1 = ys.min(), ys.max()
     width, height = x1 - x0, y1 - y0
     return np.asarray([x0-offset, y0-offset, width+offset*2, height+offset*2])
-
-
-def contour_centroid(contour):
-    ys, xs = contour.T
-    return xs.mean(), ys.mean()
 
 
 def create_graphics_context(params):
