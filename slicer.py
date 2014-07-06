@@ -61,10 +61,10 @@ def contour_bounding_box(contour, offset=0.0):
 def create_graphics_context(params):
     pagesize = (params['output_width'] * params['output_dpi'],
                 params['output_height'] * params['output_dpi'])
-    canvas = Canvas(filename="laser.pdf", pagesize=pagesize)
+    canvas = Canvas(filename=params['output_name'], pagesize=pagesize)
 
     gc = PdfGraphicsContext(canvas)
-    gc.set_line_width(params['hairline_width'] * inch)
+    gc.set_line_width(params.get('hairline_width', 0.001) * inch)
 
     return gc
 
@@ -127,8 +127,9 @@ def draw_contours(contour_collection, params):
 
 
 def get_all_slice_contours(volume, params):
-    bbox_padding = params['output_dpi'] * params['contour_bbox_padding']
-    bbox_index = params['contour_bbox_index']
+    bbox_padding = params.get('contour_bbox_padding', 0.0)
+    bbox_padding *= params['output_dpi']
+    bbox_index = params.get('contour_bbox_index', 0)
     contour_sets = []
     for i, slc in enumerate(volume):
         contours = get_slice_contours(slc, i, params)
@@ -144,7 +145,7 @@ def get_all_slice_contours(volume, params):
 
 def get_registration_contours(params):
     contours = []
-    for mark in params['registration_marks']:
+    for mark in params.get('registration_marks', []):
         points = np.asarray(mark['points'])
         points = pixels_to_points(points, params)
         contours.append(Contour(points=points, color=mark['color']))
@@ -153,8 +154,8 @@ def get_registration_contours(params):
 
 def get_slice_contours(slice, slice_index, params):
     slice_contours = []
-    clip_boxes = params['clip_boxes']
-    clip_overlap_percentage = params['clip_overlap_percentage']
+    clip_boxes = params.get('clip_boxes', [])
+    clip_overlap_percentage = params.get('clip_overlap_percentage', 1.0)
     for contour_params in params['contours']:
         if slice_index > contour_params['last_slice']:
             break
@@ -189,8 +190,8 @@ def intersection_area(box0, box1):
 
 
 def pixels_to_points(contour, params):
-    scale_factor = params['scale_factor']
-    voxel_dims = params['voxel_dims']
+    scale_factor = params.get('scale_factor', 1.0)
+    voxel_dims = params.get('voxel_dims', (1.0, 1.0, 1.0))
     x_dims, y_dims = voxel_dims[:2]
     x_factor = x_dims * mm * scale_factor
     y_factor = y_dims * mm * scale_factor
