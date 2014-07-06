@@ -66,16 +66,13 @@ def create_graphics_context(params):
     gc = PdfGraphicsContext(canvas)
     gc.set_line_width(params['hairline_width'] * inch)
 
-    default_color = COLOR_TABLE[params['default_color']]
-    gc.set_stroke_color(default_color)
-    gc.set_fill_color(default_color)
-
     return gc
 
 
 def draw_contours(contour_collection, params):
     gc = create_graphics_context(params)
 
+    text_color = COLOR_TABLE[params['text_color']]
     output_w = params['output_width'] * params['output_dpi']
     output_h = params['output_height'] * params['output_dpi']
     origin_x, origin_y = 0.0, 0.0
@@ -119,6 +116,8 @@ def draw_contours(contour_collection, params):
         with gc:
             pos_x = origin_x + width / 2.
             pos_y = origin_y + height / 2.
+            gc.set_stroke_color(text_color)
+            gc.set_fill_color(text_color)
             gc.show_text_at_point(str(contour_set.index), pos_x, pos_y)
 
         line_height = max(height, line_height)
