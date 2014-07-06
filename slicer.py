@@ -108,6 +108,7 @@ def draw_contours(contour_collection, params):
                 points = cntr.points
                 points[:, 1] -= x
                 points[:, 0] -= y
+
                 with gc:
                     gc.set_stroke_color(COLOR_TABLE[cntr.color])
                     gc.lines(points)
@@ -135,10 +136,20 @@ def get_all_slice_contours(volume, params):
         if contours:
             bbox = contour_bounding_box(contours[bbox_index].points,
                                         offset=bbox_padding)
+            contours.extend(get_registration_contours(params))
             cntr = ContourSet(contours=contours, index=i, bounding_box=bbox)
             contour_sets.append(cntr)
 
     return ContourSetCollection(contour_sets=contour_sets)
+
+
+def get_registration_contours(params):
+    contours = []
+    for mark in params['registration_marks']:
+        points = np.asarray(mark['points'])
+        points = pixels_to_points(points, params)
+        contours.append(Contour(points=points, color=mark['color']))
+    return contours
 
 
 def get_slice_contours(slice, slice_index, params):
