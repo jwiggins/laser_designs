@@ -131,7 +131,7 @@ def get_all_slice_contours(volume, params):
     bbox_padding *= params['output_dpi']
     bbox_index = params.get('contour_bbox_index', 0)
     contour_sets = []
-    for i, slc in enumerate(volume):
+    for i, slc in enumerate(volume[:1]):
         contours = get_slice_contours(slc, i, params)
         if contours:
             bbox = contour_bounding_box(contours[bbox_index].points,
