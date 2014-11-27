@@ -9,10 +9,32 @@ THICKNESS_SCALE = 2.3622/3.0  # 0.093" thick material
 PIXEL_SPACING = 0.48828125
 pixels_to_points = lambda con: con * PIXEL_SPACING * mm * THICKNESS_SCALE
 
+HEAD_CENTER = (235, 205)
+
 # Radius (10mm LED)
 RADIUS = 5.75  # mm
-LED_CENTERS = (
-    (260, 370),
+
+
+def make_round_pattern(center, radius=RADIUS):
+    """ Generate a round cluster of positions.
+    """
+    positions = [center]
+
+    cy, cx = center
+    for i, count in enumerate((6, 11), start=1):
+        dist = radius * 2.75 * i / PIXEL_SPACING
+        thetas = np.linspace(0, 2*np.pi, count, endpoint=False)
+        xs = np.cos(thetas)*dist + cx
+        ys = np.sin(thetas)*dist + cy
+
+        positions.extend(zip(ys, xs))
+
+    return positions
+
+
+# LEDs positioned around the edge of the head
+LED_CENTERS_EDGE = (
+    (240, 370),
     (290, 345),
     (316, 315),
     (335, 280),
@@ -37,12 +59,14 @@ LED_CENTERS = (
     (190, 365),
     (225, 375),
 )
+# LEDs positioned in a round centered cluster
+LED_CENTERS_ROUND = make_round_pattern(HEAD_CENTER)
 
 
 def build_post_contours(radius=RADIUS):
     radius /= PIXEL_SPACING
-    marks = []
-    for center in LED_CENTERS:
+    centers = LED_CENTERS_ROUND
+    for center in centers:
         cy, cx = center
         thetas = np.linspace(0, 2*np.pi, 25)
         xs = np.cos(thetas)*radius + cx
