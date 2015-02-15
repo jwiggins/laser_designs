@@ -1,4 +1,4 @@
-Laser Slicer
+DICOM Slicer
 ============
 
 A script which converts 3D volumes into contour sets which can be cut out on a
